@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { Admin, Record } from "pocketbase";
+import type { User } from "$lib/types/types";
 
 // for information about these interfaces
 declare global {
@@ -8,7 +8,7 @@ declare global {
 		type PocketBase = import("pocketbase").default;
 		interface Locals {
 			pb: PocketBase;
-			user: Record | Admin | null | undefined;
+			user: User;
 		}
 		// interface Error {}
 		// interface PageData {}
