@@ -1,11 +1,10 @@
-import { generateUsername } from "$lib/utils/utils";
 import { error, redirect } from "@sveltejs/kit";
+import { generateUsername } from "$lib/utils/utils";
 import type { Actions } from "./$types";
 
 export const actions: Actions = {
 	register: async ({ locals, request }) => {
 		const body = Object.fromEntries(await request.formData());
-
 		const username: string = generateUsername((body.name as string).split(" ").join("")).toLowerCase();
 
 		try {

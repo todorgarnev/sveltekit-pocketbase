@@ -30,7 +30,7 @@
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
 						<div class="w-10 rounded-full">
-							<img src="https://placeimg.com/80/80/people" alt="User avatar" />
+							<img src="https://i.pravatar.cc/80" alt="avatar" />
 						</div>
 					</label>
 
@@ -43,7 +43,7 @@
 						<li><a href="/my/settings">Setting</a></li>
 
 						<li>
-							<form action="/logout" method="POST" use:enhance>
+							<form action="/logout" method="POST">
 								<button type="submit" class="w-full text-start">Logout</button>
 							</form>
 						</li>

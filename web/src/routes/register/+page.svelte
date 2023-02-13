@@ -1,7 +1,9 @@
+<script>
+	import { enhance } from "$app/forms";
+</script>
+
 <div class="flex flex-col items-center h-full w-full">
-	<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content">
-		Register for an account
-	</h2>
+	<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content">Register for an account</h2>
 
 	<p class="text-center mt-1">
 		Or
@@ -9,13 +11,13 @@
 		if you have already an account
 	</p>
 
-	<form action="?/register" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4">
+	<form action="?/register" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4" use:enhance>
 		<div class="form-control w-full max-w-md">
 			<label for="name" class="label font-medium pb-1">
 				<span class="label-text">Name</span>
 			</label>
 
-			<input type="text" name="name" class="input input-bordered w-full max-w-md">
+			<input type="text" name="name" class="input input-bordered w-full max-w-md" />
 		</div>
 
 		<div class="form-control w-full max-w-md">
@@ -23,7 +25,7 @@
 				<span class="label-text">Email</span>
 			</label>
 
-			<input type="email" name="email" class="input input-bordered w-full max-w-md">
+			<input type="email" name="email" class="input input-bordered w-full max-w-md" />
 		</div>
 
 		<div class="form-control w-full max-w-md">
@@ -31,15 +33,15 @@
 				<span class="label-text">Password</span>
 			</label>
 
-			<input type="password" name="password" class="input input-bordered w-full max-w-md">
+			<input type="password" name="password" class="input input-bordered w-full max-w-md" />
 		</div>
 
 		<div class="form-control w-full max-w-md">
-			<label for="confirmPassword" class="label font-medium pb-1">
+			<label for="passwordConfirm" class="label font-medium pb-1">
 				<span class="label-text">Confirm password</span>
 			</label>
 
-			<input type="password" name="confirmPassword" class="input input-bordered w-full max-w-md">
+			<input type="password" name="passwordConfirm" class="input input-bordered w-full max-w-md" />
 		</div>
 
 		<div class="w-full max-w-md pt-2">
