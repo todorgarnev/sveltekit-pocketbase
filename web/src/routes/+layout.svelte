@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
+	import { getImageUrl } from "$lib/utils/utils";
 	import type { PageData } from "./$types";
 	import "../app.postcss";
 
@@ -30,7 +30,12 @@
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
 						<div class="w-10 rounded-full">
-							<img src="https://i.pravatar.cc/80" alt="avatar" />
+							<img
+								src={data?.user?.avatar
+									? getImageUrl(data.user.collectionId, data.user.id, data.user.avatar)
+									: `https://ui-avatars.com/api/?name${data.user?.name}"} alt="user avatar`}
+								alt="avatar"
+							/>
 						</div>
 					</label>
 
