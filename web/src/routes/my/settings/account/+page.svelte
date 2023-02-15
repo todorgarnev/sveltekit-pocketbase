@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from "$app/forms";
+	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
+	import { invalidateAll } from "$app/navigation";
 	import { Modal, Input } from "$lib/components";
 	import type { PageData } from "./$types";
 
@@ -7,6 +8,47 @@
 
 	let emailModalOpen: boolean = false;
 	let usernameModalOpen: boolean = false;
+	let loading: boolean = false;
+
+	const submitUpdateEmail: SubmitFunction = () => {
+		loading = true;
+		emailModalOpen = true;
+
+		return async ({ result }) => {
+			switch (result.type) {
+				case "success":
+					await invalidateAll();
+					emailModalOpen = false;
+					break;
+				case "error":
+					break;
+				default:
+					await applyAction(result);
+			}
+
+			loading = false;
+		};
+	};
+
+	const submitUpdateUsername: SubmitFunction = () => {
+		loading = true;
+		usernameModalOpen = true;
+
+		return async ({ result }) => {
+			switch (result.type) {
+				case "success":
+					await invalidateAll();
+					usernameModalOpen = false;
+					break;
+				case "error":
+					break;
+				default:
+					await applyAction(result);
+			}
+
+			loading = false;
+		};
+	};
 </script>
 
 <div class="flex flex-col w-full-h-full space-y-12">
@@ -20,9 +62,9 @@
 
 			<h3 slot="heading">Change Your email</h3>
 
-			<form action="?/updateEmail" method="POST" use:enhance class="space-y-2">
-				<Input id="email" type="email" required={true} label="Enter your new email address" />
-				<button type="submit" class="btn btn-primary w-full">Change my email</button>
+			<form action="?/updateEmail" method="POST" use:enhance={submitUpdateEmail} class="space-y-2">
+				<Input id="email" type="email" required label="Enter your new email address" disabled={loading} />
+				<button type="submit" class="btn btn-primary w-full" disabled={loading}>Change my email</button>
 			</form>
 		</Modal>
 	</div>
@@ -39,9 +81,9 @@
 
 			<h3 slot="heading">Change Your Username</h3>
 
-			<form action="?/updateUsername" method="POST" use:enhance class="space-y-2">
-				<Input id="username" type="text" required={true} label="Enter your new username" />
-				<button type="submit" class="btn btn-primary w-full">Change my username</button>
+			<form action="?/updateUsername" method="POST" use:enhance={submitUpdateUsername} class="space-y-2">
+				<Input id="username" type="text" required label="Enter your new username" disabled={loading} />
+				<button type="submit" class="btn btn-primary w-full" disabled={loading}>Change my username</button>
 			</form>
 		</Modal>
 	</div>

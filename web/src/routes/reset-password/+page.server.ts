@@ -1,11 +1,5 @@
-import { error, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
-
-export const load: PageServerLoad = ({ locals }) => {
-	if (locals.user) {
-		throw redirect(303, "/");
-	}
-};
+import { error } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 export const actions: Actions = {
 	resetPassword: async ({ request, locals }) => {
