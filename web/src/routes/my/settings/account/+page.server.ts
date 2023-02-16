@@ -8,6 +8,7 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("users").requestEmailChange(data.email as string);
 		} catch (err) {
+			console.log("Error: ", err);
 			throw error(400, "Something went wrong updating your email");
 		}
 
@@ -21,7 +22,7 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("users").getFirstListItem(`username = "${data.username}"`);
 		} catch (err) {
-			if ((err as { status: number; body: string }).status === 404) {
+			if ((err as { status: number }).status === 404) {
 				try {
 					await locals.pb.collection("users").update(locals?.user?.id ?? "", { username: data.username });
 
