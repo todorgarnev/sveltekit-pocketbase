@@ -1,8 +1,6 @@
-import type { User } from "../types/types";
-
 const { randomBytes } = await import("node:crypto");
 
-export const serializeNonPOJOs = (obj: User): User => {
+export const serializeNonPOJOs = (obj: any) => {
 	return structuredClone(obj);
 };
 

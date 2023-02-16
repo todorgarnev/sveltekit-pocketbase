@@ -1,3 +1,13 @@
-import type { Admin, Record } from "pocketbase";
-
-export type User = Record | Admin | null | undefined;
+export type Project = {
+	collectionId: string;
+	collectionName: string;
+	created: string;
+	description: string;
+	id: string;
+	name: string;
+	tagline: string;
+	thumbnail: string;
+	updated: string;
+	url: string;
+	user: string;
+};
