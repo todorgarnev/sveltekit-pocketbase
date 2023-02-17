@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"pocketbase": "0.8.0-rc4"
+		"pocketbase": "0.8.0-rc4",
+		"zod": "^3.20.6"
 	}
 }

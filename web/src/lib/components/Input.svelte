@@ -6,6 +6,7 @@
 	export let type: string = "text";
 	export let disabled: boolean = false;
 	export let required: boolean = false;
+	export let errors: string[] = [];
 </script>
 
 <div class="form-control w-full max-w-lg mb-2">
@@ -21,6 +22,16 @@
 		{disabled}
 		{placeholder}
 		name={id}
-		class="input input-bordered w-full max-w-lg"
+		class="input input-bordered w-full max-w-lg {errors ? "border-red-400" : ""}"
 	/>
+
+	{#if errors}
+		{#each errors as error}
+			<label for="" class="label py-0pt-1">
+				<span class="label-text-alt text-error">
+					{error}
+				</span>
+			</label>
+		{/each}
+	{/if}
 </div>
