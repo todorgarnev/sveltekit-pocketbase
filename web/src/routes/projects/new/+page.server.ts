@@ -1,4 +1,7 @@
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { serialize } from "object-to-formdata";
+import { createProjectSchema } from "$lib/schemas/schemas";
+import { validateData } from "$lib/utils/utils";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -10,16 +13,26 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	create: async ({ request, locals }) => {
 		const body = await request.formData();
-		const thumbnail = body.get("thumbnail");
+		const thumb = body.get("thumbnail");
 
-		if ((thumbnail as Blob).size === 0) {
+		if ((thumb as Blob).size === 0) {
 			body.delete("thumbnail");
 		}
 
 		body.append("user", locals?.user?.id ?? "");
 
+		const { formData, errors } = await validateData(body, createProjectSchema);
+		const { thumbnail, ...rest } = formData;
+
+		if (errors) {
+			return fail(400, {
+				data: rest,
+				errors: errors.fieldErrors
+			});
+		}
+
 		try {
-			await locals.pb.collection("projects").create(body);
+			await locals.pb.collection("projects").create(serialize(formData));
 		} catch (err) {
 			console.log("Error: ", err);
 			throw error(500, "Something went wrong");

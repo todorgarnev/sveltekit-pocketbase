@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodIssueCode, type RefinementCtx } from "zod";
 
 export const loginUserSchema = z.object({
 	email: z.string().email({ message: "Email must be a valid email" }),
@@ -32,14 +32,56 @@ export const registerUserSchema = z
 	.superRefine(({ passwordConfirm, password }, ctx) => {
 		if (passwordConfirm !== password) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: ZodIssueCode.custom,
 				message: "Password and Confirm password must match",
 				path: ["password"]
 			});
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: ZodIssueCode.custom,
 				message: "Password and Confirm password must match",
 				path: ["passwordConfirm"]
 			});
 		}
 	});
+
+const imageTypes = ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif"];
+
+export const createProjectSchema = z.object({
+	name: z
+		.string()
+		.min(1, { message: "Name is required" })
+		.max(64, { message: "Name must be 64 characters or less" })
+		.trim(),
+	tagline: z
+		.string()
+		.min(1, { message: "Tagline is required" })
+		.max(64, { message: "Tagline must be 64 characters or less" })
+		.trim(),
+	url: z.string().url({ message: "URL must be a valid URL" }),
+	description: z
+		.string()
+		.min(1, { message: "Description is required" })
+		.max(512, { message: "Description must be 512 characters or less" })
+		.trim(),
+	thumbnail: z
+		.instanceof(Blob)
+		.optional()
+		.superRefine((val: Blob | undefined, ctx: RefinementCtx) => {
+			if (val) {
+				if (val.size > 5242880) {
+					ctx.addIssue({
+						code: ZodIssueCode.custom,
+						message: "Thumbnail must be less  than 5MB"
+					});
+				}
+
+				if (!imageTypes.includes(val.type)) {
+					ctx.addIssue({
+						code: ZodIssueCode.custom,
+						message: "Unsupported file type. Supported formats: jpeg, jpg, png, webp, svg, gif"
+					});
+				}
+			}
+		}),
+	user: z.string({ required_error: "User is required" })
+});

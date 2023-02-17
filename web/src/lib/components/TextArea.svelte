@@ -3,28 +3,24 @@
 	export let placeholder: string = "";
 	export let id: string = "";
 	export let label: string = "";
-	export let type: string = "text";
 	export let disabled: boolean = false;
 	export let required: boolean = false;
 	export let errors: string[] = [];
 </script>
 
-<div class="form-control w-full max-w-lg mb-2">
+<div class="form-control w-full max-w-lg">
 	<label for={id} class="label font-medium pb-1">
 		<span class="label-text">{label}</span>
 	</label>
 
-	<input
+	<textarea
 		{value}
-		{type}
 		{id}
 		{required}
 		{disabled}
 		{placeholder}
 		name={id}
-		class="{type === 'file'
-			? 'file-input file-input-bordered w-full max-w-lg'
-			: 'input input-bordered w-full max-w-lg'} {errors && errors.length > 0 ? 'border-red-400' : ''}"
+		class="textarea textarea-bordered h-24 resize-none {errors && errors.length > 0 ? 'border-red-400' : ''}"
 	/>
 
 	{#if errors}

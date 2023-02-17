@@ -11,20 +11,20 @@
 	<p class="text-center mt-1">We'll send you an email with a link to reset your password.</p>
 
 	<form action="?/resetPassword" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4" use:enhance>
-		<div class="form-control w-full max-w-md">
+		<div class="form-control w-full max-w-lg">
 			<label for="email" class="label font-medium pb-1">
 				<span class="label-text">Email</span>
 			</label>
 
-			<input type="email" name="email" class="input input-bordered w-full max-w-md" />
+			<input type="email" name="email" class="input input-bordered w-full max-w-lg" />
 		</div>
 
-		<div class="w-full max-w-md pt-2">
+		<div class="w-full max-w-lg pt-2">
 			<button type="submit" class="btn btn-primary w-full">Request Password Reset</button>
 		</div>
 
 		{#if form?.success}
-			<div class="alert alert-success shadow-lg w-full max-w-md">
+			<div class="alert alert-success shadow-lg w-full max-w-lg">
 				<div>
 					<svg class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 						<path
