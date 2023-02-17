@@ -1,5 +1,9 @@
-<script>
+<script lang="ts">
 	import { enhance } from "$app/forms";
+	import { Input } from "$lib/components";
+	import type { ActionData } from "./$types";
+
+	export let form: ActionData;
 </script>
 
 <div class="flex flex-col items-center h-full w-full">
@@ -12,39 +16,12 @@
 	</p>
 
 	<form action="?/register" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4" use:enhance>
-		<div class="form-control w-full max-w-md">
-			<label for="name" class="label font-medium pb-1">
-				<span class="label-text">Name</span>
-			</label>
+		<Input id="name" label="Name" value={form?.data?.name ?? ""} errors={form?.errors?.name} />
+		<Input id="email" type="email" label="Email" value={form?.data?.email ?? ""} errors={form?.errors?.email} />
+		<Input id="password" type="password" label="Password" errors={form?.errors?.password} />
+		<Input id="passwordConfirm" type="password" label="Confirm Password" errors={form?.errors?.passwordConfirm} />
 
-			<input type="text" name="name" class="input input-bordered w-full max-w-md" />
-		</div>
-
-		<div class="form-control w-full max-w-md">
-			<label for="email" class="label font-medium pb-1">
-				<span class="label-text">Email</span>
-			</label>
-
-			<input type="email" name="email" class="input input-bordered w-full max-w-md" />
-		</div>
-
-		<div class="form-control w-full max-w-md">
-			<label for="password" class="label font-medium pb-1">
-				<span class="label-text">Password</span>
-			</label>
-
-			<input type="password" name="password" class="input input-bordered w-full max-w-md" />
-		</div>
-
-		<div class="form-control w-full max-w-md">
-			<label for="passwordConfirm" class="label font-medium pb-1">
-				<span class="label-text">Confirm password</span>
-			</label>
-
-			<input type="password" name="passwordConfirm" class="input input-bordered w-full max-w-md" />
-		</div>
-
-		<div class="w-full max-w-md pt-2">
+		<div class="w-full max-w-lg pt-2">
 			<button type="submit" class="btn btn-primary w-full">Register</button>
 		</div>
 	</form>

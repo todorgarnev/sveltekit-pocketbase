@@ -22,7 +22,7 @@
 		{disabled}
 		{placeholder}
 		name={id}
-		class="input input-bordered w-full max-w-lg {errors ? "border-red-400" : ""}"
+		class="input input-bordered w-full max-w-lg {errors && errors.length > 0 ? "border-red-400" : ""}"
 	/>
 
 	{#if errors}
