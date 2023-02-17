@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
+	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { Icon, Pencil } from "svelte-hero-icons";
 	import { Input } from "$lib/components";
@@ -24,7 +24,7 @@
 	const submitUpdateProfile: SubmitFunction = () => {
 		loading = true;
 
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
 					await invalidateAll();
@@ -32,7 +32,7 @@
 				case "error":
 					break;
 				default:
-					await applyAction(result);
+					await update();
 			}
 
 			loading = false;

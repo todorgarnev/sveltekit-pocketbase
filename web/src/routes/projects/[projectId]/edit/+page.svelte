@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Icon, Trash } from "svelte-hero-icons";
-	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
+	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { getImageUrl } from "$lib/utils/utils";
-	import { Input } from "$lib/components";
-	import type { PageData } from "./$types";
+	import { Input, TextArea } from "$lib/components";
+	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
+	export let form: ActionData;
 
 	let loading: boolean = false;
 
@@ -15,7 +16,7 @@
 	const submitUpdateProfile: SubmitFunction = () => {
 		loading = true;
 
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
 					await invalidateAll();
@@ -23,7 +24,7 @@
 				case "error":
 					break;
 				default:
-					await applyAction(result);
+					await update();
 			}
 
 			loading = false;
@@ -42,25 +43,24 @@
 		>
 			<h3 class="text-3xl font-bold">Edit {project.name}</h3>
 
-			<Input id="name" label="Project name" value={project.name ?? ""} />
-			<Input id="tagline" label="Project tagline" value={project.tagline ?? ""} />
-			<Input id="url" label="Project URL" value={project.url ?? ""} />
+			<Input id="name" label="Project name" value={form?.data?.name ?? project.name} errors={form?.errors?.name} />
+			<Input
+				id="tagline"
+				label="Project tagline"
+				value={form?.data?.tagline ?? project.tagline}
+				errors={form?.errors?.tagline}
+			/>
+			<Input id="url" label="Project URL" value={form?.data?.url ?? project.url} errors={form?.errors?.url} />
+			<TextArea
+				id="description"
+				label="Project description"
+				value={form?.data?.description ?? project.description}
+				errors={form?.errors?.description}
+			/>
 
 			<div class="form-control w-full max-w-lg">
 				<label for="description" class="label font-medium pb-1">
-					<span class="label-text">Project description</span>
-				</label>
-
-				<textarea
-					name="description"
-					class="textarea textarea-bordered h-24 resize-none"
-					value={project.description ?? ""}
-				/>
-			</div>
-
-			<div class="form-control w-full max-w-lg">
-				<label for="description" class="label font-medium pb-1">
-					<span class="label-text">Thumbnail</span>
+					<span class="label-text">Project Thumbnail</span>
 				</label>
 
 				{#if project.thumbnail}
@@ -86,6 +86,16 @@
 					id="thumbnail"
 					class="file-input file-input-bordered w-full max-w-lg mt-2"
 				/>
+
+				{#if form?.errors?.thumbnail}
+					{#each form?.errors?.thumbnail as error}
+						<label for="thumbnail" class="label py-0pt-1">
+							<span class="label-text-alt text-error">
+								{error}
+							</span>
+						</label>
+					{/each}
+				{/if}
 			</div>
 
 			<div class="w-full max-w-lg pt-3">

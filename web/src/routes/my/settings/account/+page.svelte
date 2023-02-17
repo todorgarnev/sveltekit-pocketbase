@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
+	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { Modal, Input } from "$lib/components";
 	import type { PageData } from "./$types";
@@ -14,7 +14,7 @@
 		loading = true;
 		emailModalOpen = true;
 
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
 					await invalidateAll();
@@ -23,7 +23,7 @@
 				case "error":
 					break;
 				default:
-					await applyAction(result);
+					await update();
 			}
 
 			loading = false;
@@ -34,7 +34,7 @@
 		loading = true;
 		usernameModalOpen = true;
 
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
 					await invalidateAll();
@@ -43,7 +43,7 @@
 				case "error":
 					break;
 				default:
-					await applyAction(result);
+					await update();
 			}
 
 			loading = false;

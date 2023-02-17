@@ -1,6 +1,8 @@
-import { error, redirect } from "@sveltejs/kit";
-import { serializeNonPOJOs } from "$lib/utils/utils";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { serialize } from "object-to-formdata";
+import { serializeNonPOJOs, validateData } from "$lib/utils/utils";
 import type { Actions, PageServerLoad } from "./$types";
+import { editProjectSchema } from "$lib/schemas/schemas";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!locals.pb.authStore.isValid) {
@@ -23,15 +25,25 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
 	updateProject: async ({ request, locals, params }) => {
-		const data = await request.formData();
-		const thumbnail = data.get("thumbnail");
+		const body = await request.formData();
+		const thumb = body.get("thumbnail");
 
-		if ((thumbnail as Blob).size === 0) {
-			data.delete("thumbnail");
+		if ((thumb as Blob).size === 0) {
+			body.delete("thumbnail");
+		}
+
+		const { formData, errors } = await validateData(body, editProjectSchema);
+		const { thumbnail, ...rest } = formData;
+
+		if (errors) {
+			return fail(400, {
+				data: rest,
+				errors: errors.fieldErrors
+			});
 		}
 
 		try {
-			await locals.pb.collection("projects").update(params.projectId, data);
+			await locals.pb.collection("projects").update(params.projectId, serialize(formData));
 		} catch (err) {
 			console.log("Error: ", err);
 			throw error(400, "Something went wrong");
