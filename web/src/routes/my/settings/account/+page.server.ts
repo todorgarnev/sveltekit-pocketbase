@@ -1,7 +1,13 @@
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import { updateEmailSchema, updateUsernameSchema } from "$lib/schemas/schemas";
 import { validateData } from "$lib/utils/utils";
-import type { Actions } from "../$types";
+import type { PageServerLoad, Actions } from "./$types";
+
+export const load: PageServerLoad = ({ locals }) => {
+	if (!locals.pb.authStore.isValid) {
+		throw redirect(303, "/login");
+	}
+};
 
 export const actions: Actions = {
 	updateEmail: async ({ request, locals }) => {
@@ -10,7 +16,7 @@ export const actions: Actions = {
 		if (errors) {
 			return fail(400, {
 				data: formData,
-				errors: errors.fieldErrors
+				errors
 			});
 		}
 
@@ -27,11 +33,11 @@ export const actions: Actions = {
 	},
 	updateUsername: async ({ request, locals }) => {
 		const { formData, errors } = await validateData(await request.formData(), updateUsernameSchema);
-		console.log("errors >>", errors);
+
 		if (errors) {
 			return fail(400, {
 				data: formData,
-				errors: errors.fieldErrors
+				errors
 			});
 		}
 

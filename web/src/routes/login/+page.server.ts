@@ -10,7 +10,7 @@ export const actions: Actions = {
 		if (errors) {
 			return fail(400, {
 				data: formData,
-				errors: errors.fieldErrors
+				errors
 			});
 		}
 
