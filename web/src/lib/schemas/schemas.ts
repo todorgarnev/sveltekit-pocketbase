@@ -87,3 +87,15 @@ export const createProjectSchema = z.object({
 });
 
 export const editProjectSchema = createProjectSchema.omit({ user: true });
+
+export const updateEmailSchema = z.object({
+	email: z.string().email({ message: "Email must be a valid email" })
+});
+
+export const updateUsernameSchema = z.object({
+	username: z
+		.string()
+		.min(3, { message: "Username must be at least 3 characters" })
+		.max(24, { message: "Username must be 24 characters or less" })
+		.regex(/^[a-zA-Z0-9]*$/, { message: "Username can only contain letters or numbers" })
+});

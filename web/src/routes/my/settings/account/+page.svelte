@@ -2,9 +2,10 @@
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { Modal, Input } from "$lib/components";
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 
 	export let data: PageData;
+	export let form: ActionData;
 
 	let emailModalOpen: boolean = false;
 	let usernameModalOpen: boolean = false;
@@ -63,7 +64,14 @@
 			<h3 slot="heading">Change Your email</h3>
 
 			<form action="?/updateEmail" method="POST" use:enhance={submitUpdateEmail} class="space-y-2">
-				<Input id="email" type="email" required label="Enter your new email address" disabled={loading} />
+				<Input
+					id="email"
+					type="email"
+					required
+					label="Enter your new email address"
+					disabled={loading}
+					errors={form?.errors?.email}
+				/>
 				<button type="submit" class="btn btn-primary w-full" disabled={loading}>Change my email</button>
 			</form>
 		</Modal>
@@ -82,7 +90,14 @@
 			<h3 slot="heading">Change Your Username</h3>
 
 			<form action="?/updateUsername" method="POST" use:enhance={submitUpdateUsername} class="space-y-2">
-				<Input id="username" type="text" required label="Enter your new username" disabled={loading} />
+				<Input
+					id="username"
+					type="text"
+					required
+					label="Enter your new username"
+					disabled={loading}
+					errors={form?.errors?.username}
+				/>
 				<button type="submit" class="btn btn-primary w-full" disabled={loading}>Change my username</button>
 			</form>
 		</Modal>
