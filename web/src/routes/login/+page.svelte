@@ -1,9 +1,39 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
+	import { enhance, type SubmitFunction } from "$app/forms";
 	import { Input } from "$lib/components";
+	import toast from "svelte-french-toast";
 	import type { ActionData } from "./$types";
 
 	export let form: ActionData;
+
+	let loading: boolean = false;
+
+	const submitLogin: SubmitFunction = () => {
+		loading = true;
+
+		return async ({ result, update }) => {
+			switch (result.type) {
+				case "success":
+					await update();
+					break;
+				case "failure":
+					toast.error("Invalid credentials", {
+						position: "bottom-left"
+					});
+					await update();
+					break;
+				case "error":
+					toast.error(result.error.message, {
+						position: "bottom-left"
+					});
+					break;
+				default:
+					await update();
+			}
+
+			loading = false;
+		};
+	};
 </script>
 
 <div class="flex flex-col items-center h-full w-full">
@@ -15,9 +45,21 @@
 		if you don't already have an account
 	</p>
 
-	<form action="?/login" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4" use:enhance>
-		<Input type="email" id="email" label="Email" value={form?.data?.email ?? ""} errors={form?.errors?.email} />
-		<Input type="password" id="password" label="Password" errors={form?.errors?.password} />
+	<form
+		action="?/login"
+		method="POST"
+		class="flex flex-col items-center space-y-2 w-full pt-4"
+		use:enhance={submitLogin}
+	>
+		<Input
+			type="email"
+			id="email"
+			label="Email"
+			value={form?.data?.email ?? ""}
+			errors={form?.errors?.email}
+			disabled={loading}
+		/>
+		<Input type="password" id="password" label="Password" errors={form?.errors?.password} disabled={loading} />
 
 		<div class="w-full max-w-lg">
 			<a href="/reset-password" class="font-medium text-primary hover:cursor-pointer hover:underline">
@@ -26,7 +68,7 @@
 		</div>
 
 		<div class="w-full max-w-lg pt-2">
-			<button type="submit" class="btn btn-primary w-full">Login</button>
+			<button type="submit" class="btn btn-primary w-full" disabled={loading}>Login</button>
 		</div>
 
 		{#if form?.notVerified}

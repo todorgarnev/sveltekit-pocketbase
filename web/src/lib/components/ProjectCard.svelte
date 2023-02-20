@@ -1,0 +1,27 @@
+<script lang="ts">
+	import type { Project } from "$lib/types/types";
+	import { getImageUrl } from "$lib/utils/utils";
+
+	export let project: Project;
+</script>
+
+<div class="card w-96 bg-base-100 shadow-xl">
+	<figure>
+		<img
+			src={project?.thumbnail
+				? getImageUrl(project?.collectionId, project?.id, project?.thumbnail)
+				: `https://via.placeholder.com/400/4506CB/FFFFFF/?text=${project?.name}`}
+			alt="project thumbnail"
+		/>
+	</figure>
+
+	<div class="card-body">
+		<h2 class="card-title">{project.name}</h2>
+
+		<p>{project.tagline}</p>
+
+		<div class="card-actions justify-end">
+			<a href="/projects/{project.id}" class="btn btn-primary">View Project</a>
+		</div>
+	</div>
+</div>

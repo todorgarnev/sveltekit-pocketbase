@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getImageUrl } from "$lib/utils/utils";
+	import { Toaster } from "svelte-french-toast";
 	import type { PageData } from "./$types";
 	import "../app.postcss";
 
@@ -7,6 +8,8 @@
 
 	$: ({ user } = data);
 </script>
+
+<Toaster />
 
 <div class="min-h-full">
 	<nav class="navbar bg-base-100 border-b">
@@ -45,7 +48,7 @@
 							<a href="/my/projects" class="justify-between">My Projects</a>
 						</li>
 
-						<li><a href="/my/settings">Setting</a></li>
+						<li><a href="/my/settings">Settings</a></li>
 
 						<li>
 							<form action="/logout" method="POST">
