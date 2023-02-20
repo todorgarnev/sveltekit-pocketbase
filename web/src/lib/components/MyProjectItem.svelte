@@ -16,15 +16,11 @@
 		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
-					toast.success("Project deleted successfully!", {
-						position: "bottom-left"
-					});
+					toast.success("Project deleted successfully!");
 					await update();
 					break;
 				case "error":
-					toast.error("Could not delete project. Try again later.", {
-						position: "bottom-left"
-					});
+					toast.error("Could not delete project. Try again later.");
 					break;
 				default:
 					await update();

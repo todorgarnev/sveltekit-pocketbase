@@ -17,15 +17,11 @@
 					await update();
 					break;
 				case "failure":
-					toast.error("Invalid credentials", {
-						position: "bottom-left"
-					});
+					toast.error("Invalid credentials");
 					await update();
 					break;
 				case "error":
-					toast.error(result.error.message, {
-						position: "bottom-left"
-					});
+					toast.error(result.error.message);
 					break;
 				default:
 					await update();

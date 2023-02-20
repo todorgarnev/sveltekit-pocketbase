@@ -1,4 +1,5 @@
 import { error } from "@sveltejs/kit";
+import type { ServerError } from "$lib/types/types";
 import type { Actions } from "./$types";
 
 export const actions: Actions = {
@@ -11,8 +12,7 @@ export const actions: Actions = {
 				success: true
 			};
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(500, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 	}
 };

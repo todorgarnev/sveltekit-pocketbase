@@ -1,3 +1,4 @@
+import type { ServerError } from "$lib/types/types";
 import type { ZodError, Schema } from "zod";
 
 const { randomBytes } = await import("node:crypto");

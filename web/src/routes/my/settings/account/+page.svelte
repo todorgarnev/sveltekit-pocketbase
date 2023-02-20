@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
+	import toast from "svelte-french-toast";
 	import { Modal, Input } from "$lib/components";
 	import type { PageData } from "./$types";
 
@@ -17,10 +18,12 @@
 		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
+					toast.success("Email updated successfully!");
 					await invalidateAll();
 					emailModalOpen = false;
 					break;
 				case "error":
+					toast.error(result.error.message);
 					break;
 				default:
 					await update();
@@ -37,10 +40,12 @@
 		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
+					toast.success("Username updated successfully!");
 					await invalidateAll();
 					usernameModalOpen = false;
 					break;
 				case "error":
+					toast.error(result.error.message);
 					break;
 				default:
 					await update();

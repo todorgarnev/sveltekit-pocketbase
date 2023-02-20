@@ -1,3 +1,4 @@
+import type { ServerError } from "$lib/types/types";
 import { serializeNonPOJOs } from "$lib/utils/utils";
 import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
@@ -17,8 +18,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 			return projects;
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(400, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 	};
 
@@ -34,8 +34,7 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("projects").delete(id as string);
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(400, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		return {

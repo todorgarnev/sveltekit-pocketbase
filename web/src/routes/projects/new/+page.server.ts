@@ -3,6 +3,7 @@ import { serialize } from "object-to-formdata";
 import { createProjectSchema } from "$lib/schemas/schemas";
 import { validateData } from "$lib/utils/utils";
 import type { Actions, PageServerLoad } from "./$types";
+import type { ServerError } from "$lib/types/types";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.pb.authStore.isValid) {
@@ -34,8 +35,7 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("projects").create(serialize(formData));
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(500, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		throw redirect(303, "/my/projects");

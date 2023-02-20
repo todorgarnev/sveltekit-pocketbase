@@ -1,3 +1,4 @@
+import type { ServerError } from "$lib/types/types";
 import { error } from "@sveltejs/kit";
 import type { Actions } from "../$types";
 
@@ -12,8 +13,7 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("users").update(locals?.user?.id ?? "", data);
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(400, "Something went wrong updating your profile");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		return {

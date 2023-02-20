@@ -11,3 +11,14 @@ export type Project = {
 	url: string;
 	user: string;
 };
+
+export type ServerError = {
+	url: string;
+	status: number;
+	data: {
+		code: number;
+		message: string;
+	};
+	isAbort: boolean;
+	originalError: Error | null;
+};

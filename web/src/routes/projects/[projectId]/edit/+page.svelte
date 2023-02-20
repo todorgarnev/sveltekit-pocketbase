@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Icon, Trash } from "svelte-hero-icons";
+	import toast from "svelte-french-toast";
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { getImageUrl } from "$lib/utils/utils";
@@ -19,9 +20,11 @@
 		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
+					toast.success("Project updated successfully!");
 					await invalidateAll();
 					break;
 				case "error":
+					toast.error(result.error.message);
 					break;
 				default:
 					await update();

@@ -2,6 +2,7 @@
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { invalidateAll } from "$app/navigation";
 	import { Icon, Pencil } from "svelte-hero-icons";
+	import toast from "svelte-french-toast";
 	import { Input } from "$lib/components";
 	import { getImageUrl } from "$lib/utils/utils";
 	import type { PageData } from "./$types";
@@ -27,9 +28,11 @@
 		return async ({ result, update }) => {
 			switch (result.type) {
 				case "success":
+					toast.success("Name updated successfully!");
 					await invalidateAll();
 					break;
 				case "error":
+					toast.error(result.error.message);
 					break;
 				default:
 					await update();

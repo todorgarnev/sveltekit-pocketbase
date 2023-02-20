@@ -2,6 +2,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { generateUsername, validateData } from "$lib/utils/utils";
 import { registerUserSchema } from "$lib/schemas/schemas";
 import type { Actions } from "./$types";
+import type { ServerError } from "$lib/types/types";
 
 export const actions: Actions = {
 	register: async ({ locals, request }) => {
@@ -20,8 +21,7 @@ export const actions: Actions = {
 			await locals.pb.collection("users").create({ username, ...formData });
 			await locals.pb.collection("users").requestVerification(formData.email);
 		} catch (err) {
-			console.log("Error:", err);
-			throw error(500, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		throw redirect(303, "/login");

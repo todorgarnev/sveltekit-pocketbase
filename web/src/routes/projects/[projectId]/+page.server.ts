@@ -1,5 +1,6 @@
-import { serializeNonPOJOs } from "$lib/utils/utils";
 import { error } from "@sveltejs/kit";
+import type { ServerError } from "$lib/types/types";
+import { serializeNonPOJOs } from "$lib/utils/utils";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -8,8 +9,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			const project = serializeNonPOJOs(await locals.pb.collection("projects").getOne(projectId));
 			return project;
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(500, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 	};
 

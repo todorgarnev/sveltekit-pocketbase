@@ -3,6 +3,7 @@ import { serialize } from "object-to-formdata";
 import { serializeNonPOJOs, validateData } from "$lib/utils/utils";
 import type { Actions, PageServerLoad } from "./$types";
 import { editProjectSchema } from "$lib/schemas/schemas";
+import type { ServerError } from "$lib/types/types";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!locals.pb.authStore.isValid) {
@@ -18,8 +19,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			throw error(403, "Forbidden");
 		}
 	} catch (err) {
-		console.log("Error: ", err);
-		throw error(500, "Something went wrong");
+		throw error((err as ServerError).data.code, (err as ServerError).data.message);
 	}
 };
 
@@ -45,18 +45,14 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection("projects").update(params.projectId, serialize(formData));
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(400, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
-
-		throw redirect(303, "/my/projects");
 	},
 	deleteThumbnail: async ({ locals, params }) => {
 		try {
 			await locals.pb.collection("projects").update(params.projectId, { thumbnail: null });
 		} catch (err) {
-			console.log("Error: ", err);
-			throw error(400, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		return {

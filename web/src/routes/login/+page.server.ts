@@ -1,6 +1,7 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import { validateData } from "$lib/utils/utils";
 import { loginUserSchema } from "$lib/schemas/schemas";
+import type { ServerError } from "$lib/types/types";
 import type { Actions } from "./$types";
 
 export const actions: Actions = {
@@ -25,8 +26,7 @@ export const actions: Actions = {
 				};
 			}
 		} catch (err) {
-			console.log(err);
-			throw error(500, "Something went wrong");
+			throw error((err as ServerError).data.code, (err as ServerError).data.message);
 		}
 
 		throw redirect(303, "/");
