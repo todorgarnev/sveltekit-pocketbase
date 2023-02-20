@@ -31,7 +31,7 @@ export const validateData = async (formData: FormData, schema: Schema) => {
 
 		return {
 			formData: body as Record<string, string>,
-			errors
+			errors: errors.fieldErrors
 		};
 	}
 };

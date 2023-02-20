@@ -87,3 +87,77 @@ export const createProjectSchema = z.object({
 });
 
 export const editProjectSchema = createProjectSchema.omit({ user: true });
+
+export const updateEmailSchema = z.object({
+	email: z.string().email({ message: "Email must be a valid email" })
+});
+
+export const updateUsernameSchema = z.object({
+	username: z
+		.string()
+		.min(3, { message: "Username must be at least 3 characters" })
+		.max(24, { message: "Username must be 24 characters or less" })
+		.regex(/^[a-zA-Z0-9]*$/, { message: "Username can only contain letters or numbers" })
+});
+
+export const updatePasswordSchema = z
+	.object({
+		oldPassword: z.string({ required_error: "Old password is required" }),
+		password: z
+			.string()
+			.regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
+				message:
+					"Password must be a minimum of 8 characters and contain at least one letter, one number and one special character"
+			})
+			.trim(),
+		passwordConfirm: z
+			.string()
+			.regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
+				message:
+					"Confirm Password must be a minimum of 8 characters and contain at least one letter, one number and one special character"
+			})
+			.trim()
+	})
+	.superRefine(({ passwordConfirm, password }, ctx) => {
+		if (passwordConfirm !== password) {
+			ctx.addIssue({
+				code: ZodIssueCode.custom,
+				message: "Password and Confirm password must match",
+				path: ["password"]
+			});
+			ctx.addIssue({
+				code: ZodIssueCode.custom,
+				message: "Password and Confirm password must match",
+				path: ["passwordConfirm"]
+			});
+		}
+	});
+
+export const updateProfileSchema = z.object({
+	avatar: z
+		.instanceof(Blob)
+		.optional()
+		.superRefine((val: Blob | undefined, ctx: RefinementCtx) => {
+			if (val) {
+				if (val.size > 5242880) {
+					ctx.addIssue({
+						code: ZodIssueCode.custom,
+						message: "Avatar must be less  than 5MB"
+					});
+				}
+
+				if (!imageTypes.includes(val.type)) {
+					ctx.addIssue({
+						code: ZodIssueCode.custom,
+						message: "Unsupported file type. Supported formats: jpeg, jpg, png, webp, svg, gif"
+					});
+				}
+			}
+		}),
+	name: z
+		.string()
+		.regex(/^[a-zA-Z\s]*$/, { message: "Name can only contain letters and spaces" })
+		.min(2, { message: "Name must be at least 2 characters" })
+		.max(64, { message: "Name must be less than 64 characters" })
+		.trim()
+});
