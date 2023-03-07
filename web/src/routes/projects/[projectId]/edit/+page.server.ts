@@ -1,4 +1,4 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import { serialize } from "object-to-formdata";
 import { serializeNonPOJOs, validateData } from "$lib/utils/utils";
 import type { Actions, PageServerLoad } from "./$types";
